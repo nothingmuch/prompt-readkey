@@ -8,6 +8,7 @@ use Moose::Util::TypeConstraints;
 use Carp qw(croak);
 use Term::ReadKey;
 use List::Util qw(first);
+use Text::Table;
 
 has default_prompt => (
 	isa => "Str",
@@ -24,6 +25,16 @@ has auto_help => (
 	isa => "Bool",
 	is  => "rw",
 	default => 1,
+);
+
+has help_headings => (
+	isa => "ArrayRef[HashRef[Str]]",
+	is  => "rw",
+	default => sub {[
+		{ name => "keys", heading => "Key" },
+		{ name => "name", heading => "Name" },
+		{ name => "doc",  heading => "Description" },
+	]},
 );
 
 has help_header => (
@@ -264,8 +275,44 @@ sub display_help {
 	my ( $self, @args ) = @_;
 
 	my @options = $self->_get_arg_or_default(options => @args);
-	
-	$self->_print("FIXME help message");
+
+	my $help = join("\n\n", grep { defined }
+		$self->_get_arg_or_default(help_header => @args),
+		$self->tabulate_help_text( @args, help_table => [ map { $self->option_to_help_text(@args, option => $_) } @options ] ),
+		$self->_get_arg_or_default(help_footer => @args),
+	);
+
+	$self->_print("\n$help\n\n");
+}
+
+sub tabulate_help_text {
+	my ( $self, %args ) = @_;
+
+	my @headings = $self->_get_arg_or_default( help_headings => %args );
+
+	my $table = Text::Table->new( map { $_->{heading}, \"   " } @headings );
+
+	my @rows = _get_arg( help_table => %args );
+
+	$table->load( map {
+		my $row = $_;
+		[ map { $row->{ $_->{name} } } @headings ];
+	} @rows );
+
+	$table->body_rule("   ");
+
+	return $table;
+}
+
+sub option_to_help_text {
+	my ( $self, %args ) = @_;
+	my $opt = $args{option};
+
+	return {
+		keys => join(", ", @{ $opt->{keys} } ),
+		name => $opt->{name} || "",
+		doc => $opt->{doc}  || "",
+	};
 }
 
 sub sort_options {
