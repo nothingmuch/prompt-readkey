@@ -12,6 +12,10 @@ WriteMakefile(
 	PL_FILES     => { },
 	PREREQ_PM    => {
 		'Test::use::ok' => 0,
+		'Moose' => '0.33',
+		'Text::Table' => 0,
+		'Term::ReadKey' => 0,
+		'Scalar::Util' => 0,
 	},
 );
 
