@@ -10,6 +10,8 @@ use Term::ReadKey;
 use List::Util qw(first);
 use Text::Table;
 
+our $VERSION = "0.01";
+
 has default_prompt => (
 	isa => "Str",
 	is  => "rw",
