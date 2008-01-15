@@ -234,7 +234,6 @@ sub process_option {
 	}
 
 	return {
-		help => "?",
 		%$opt,
 		keys => \@keys,
 	};
