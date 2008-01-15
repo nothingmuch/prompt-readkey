@@ -122,7 +122,7 @@ sub _get_arg_or_default {
 	} else {
 		my $method = ( ( $name =~ m/^(?: prompt | options )$/x ) ? "default_$name" : $name );
 		if ( $self->can($method) ) {
-			return $self->$method();
+			return _deref($self->$method());
 		}
 	}
 }
