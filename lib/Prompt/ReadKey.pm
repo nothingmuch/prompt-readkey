@@ -386,7 +386,7 @@ sub read_option {
 
 	my %by_key = map {
 		my $opt = $_;
-		map { $_ => $opt } @{ $_->{keys} };
+		map { $_ => $opt } map { $self->process_char( %args, char => $_ ) } @{ $_->{keys} };
 	} @options;
 
 	my $c = $self->process_char( %args, char => $self->read_key(%args) );
