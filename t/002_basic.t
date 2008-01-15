@@ -11,7 +11,7 @@ our ( @read_ret, $print_ret );
 our ( @read_called, @print_called );
 
 {
-	package MockPrompter;
+	package MockPrompter; # Test::MockObject::Extends breaks for some reason with the default option handling
 	use Moose;
 
 	extends qw(Prompt::ReadKey);
@@ -118,13 +118,20 @@ $print_ret = 1;
 	is( @read_called, 2, "read twice" );
 
 	is( @print_called, 3, "printed three times" );
+
+	my $help = $print_called[1][1];
+	$print_called[1][1] = \"help";
 	is_deeply(
 		\@print_called,
 		[
 			[ $t, "foo [Ot] " ],
-			[ $t, "FIXME help message" ],
+			[ $t, \"help" ],
 			[ $t, "foo [Ot] " ],
 		],
 		"print arguments",
 	);
+
+	like( $help, qr/one/, "mentions 'one'" );
+	like( $help, qr/two/, "mentions 'two'" );
+	like( $help, qr/help/, "mentions 'help'" );
 }
