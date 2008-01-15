@@ -431,7 +431,7 @@ sub option_to_return_value {
 		return $self->$cb(%args);
 	} else {
 		return (
-			$self->return_name
+			$self->_get_arg_or_default(return_name => %args)
 				? $opt->{name}
 				: $opt
 		);
