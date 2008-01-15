@@ -164,7 +164,7 @@ sub do_prompt {
 	my $repeat = $self->_get_arg_or_default( repeat_until_valid => %args );
 
 	prompt: {
-		if ( my $opt = $self->_prompt_once(%args) ) {
+		if ( my $opt = $self->prompt_once(%args) ) {
 
 			if ( $opt->{reprompt_after} ) { # help, etc
 				$self->option_to_return_value(%args, option => $opt); # trigger callback
@@ -180,7 +180,7 @@ sub do_prompt {
 	return;
 }
 
-sub _prompt_once {
+sub prompt_once {
 	my ( $self, %args ) = @_;
 
 	$self->print_prompt(%args);
