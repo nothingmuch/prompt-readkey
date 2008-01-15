@@ -479,3 +479,272 @@ sub process_char {
 __PACKAGE__
 
 __END__
+
+=pod
+
+=head1 NAME
+
+Prompt::ReadKey - Darcs style single readkey option prompt.
+
+=head1 SYNOPSIS
+
+	my $p = Prompt::ReadKey->new;
+
+	my $name = $p->prompt(
+		prompt => "blah",
+		options => [
+			{ name => "foo" },
+			{
+				name => "bar",
+				default => 1,
+				doc => "This is the bar command", # used in help message
+				keys => [qw(b x)],                # defaults to substr($name, 0, 1)
+			},
+		],
+	);
+
+=head1 DESCRIPTION
+
+This module aims to provide a very subclassible L<Term::ReadKey> based prompter
+inspired by Darcs' (L<http://darcs.net>) fantastic command line user interface.
+
+Many options exist both as accessors for default values, and are passable as
+named arguments to the methods of the api.
+
+The api is structured so that the underlying methods are usable as well, you
+don't need to use the high level api to make use of this module if you don't
+want to.
+
+=head1 METHODS
+
+=over 4
+
+=item prompt %args
+
+Display a prompt, with additinal formatting and processing of additional and/or
+default options, an automated help option, etc.
+
+=item do_prompt %args
+
+Low level prompt, without processing of options and prompt reformatting.
+
+Affected by C<repeat_until_valid>.
+
+=item prompt_once %args
+
+Don't prompt repeatedly on invalid answers.
+
+=item print_prompt %args
+
+Just delegates to C<print> using the C<prompt> argument.
+
+=item prepare_options %args
+
+Returns a list of options, based on the arguments, defaults, various flags,
+etc.
+
+=item process_options %args
+
+Delegates to C<process_option> for a list of options.
+
+=item process_option %args
+
+Low level option processor, checks for validity mostly.
+
+=item gather_options
+
+Merges the explicit default options, additional options, and optional help
+option.
+
+=item get_help_keys %args
+
+Returns a list of keys that trigger the help command. Defaults to C<?> and
+C<h>.
+
+If C<auto_help> is true then it returns C<help_keys>.
+
+=item create_help_option %args
+
+Creates an option from the C<get_help_keys> key list.
+
+=item display_help %args
+
+Prints out a help message.
+
+Affected by C<help_footer> and C<help_header>, delegates to
+C<option_to_help_text> and C<tabulate_help_text> for the actual work, finally
+sending the output to C<print>.
+
+=item tabulate_help_text %args
+
+Uses L<Text::Table> to pretty print the help.
+
+Affected by the C<help_headings> option.
+
+=item option_to_help_text %args
+
+Makes a hashref of text values from an option, to be formatted by
+C<tabulate_help_text>.
+
+=item sort_options %args
+
+Sort the options. This is a stub for subclassing, the current implementation
+leaves the options in the order they were gathered.
+
+=item filter_options %args
+
+Check the set of options for validity (duplicate names and keys, etc).
+
+Affected by the C<allow_duplicate_names> option.
+
+=item prompt_string %args
+
+Returns the prompt string (from default or args).
+
+=item format_options %args
+
+Format the option keys for the prompt. Appeneded to the actual prompt by C<format_prompt>.
+
+Concatenates the key skipping options for which C<is_help> is true in the spec.
+
+If the C<case_insensitive> option is true then the default command's key will
+be uppercased, and the rest lowercased.
+
+=item format_prompt %args
+
+Append the output of C<format_options> in brackets to the actual prompt, and adds a space.
+
+=item read_option %args
+
+Wrapper for C<read_key> that returns the option selected.
+
+=item invalid_choice %args
+
+Called when an invalid key was entered. Uses C<print> internally.
+
+=item option_to_return_value %args
+
+Process the option into it's return value, triggerring callbacks or mapping to
+the option name as requested.
+
+=item read_key %args
+
+calls C<ReadMode> and C<ReadKey> to get a single character from L<Term::ReadKey>.
+
+Affected by C<echo_key>, C<auto_newline>, C<readkey_mode>, C<readmode>.
+
+=item process_char %args
+
+Under C<case_insensitive> mode will lowercase the character specified.
+
+Called for every character read and every character in the option spec by
+C<read_option>.
+
+=item print @text
+
+The default version will just call the builtin C<print>. It will locally set
+C<$|> to 1, though that is probably superflous (I think C<ReadKey> will flush
+anyway).
+
+This is the only function that does not take named arguments.
+
+=back
+
+=head1 OPTIONS AND ATTRIBUTES
+
+These attributes control default values for options.
+
+=over 4
+
+=item prompt
+
+=item default_prompt
+
+The attribute name is prefixed with C<default> for clarity.
+
+=item default_options
+
+=item options
+
+The attribute name is prefixed with C<default> for clarity.
+
+=item additional_options
+
+Additional options to append to the default or explicitly specified options.
+
+Defaults to nothing.
+
+=item auto_help
+
+Whether or not to automatically create a help command.
+
+=item help_headings
+
+The headings of the help table.
+
+Takes an array of hash refs, which are expected to have the C<name> and
+C<heading> keys filled in. The array is used for ordering and displaying the
+help table.
+
+Defaults to B<Key>, B<Name>, B<Description>.
+
+=item help_header
+
+Text to prepend to the help message.
+
+Defaults to a simple description of the help screen.
+
+=item help_footer
+
+Text to append to the help message.
+
+No default value.
+
+=item help_keys
+
+The keys that C<create_help_option> will assign to the help option.
+
+Defaults to C<?> and C<h>.
+
+=item allow_duplicate_names
+
+Whether or not duplicate option names are allowed. Defaults to 
+
+=item readkey_mode
+
+The argument to pass to C<ReadKey>. Default to C<0>. See L<Term::ReadKey>.
+
+=item readmode
+
+The value to give to C<ReadMode>. Defaults to C<3>. See L<Term::ReadKey>.
+
+=item echo_key
+
+Whether or not to echo back the key entered.
+
+=item auto_newline
+
+Whether or not to add a newline after reading a key (if the key is not newline
+itself).
+
+=item return_name
+
+When returning a value from C<option_to_return_value>, and there is no
+callback, will cause the name of the option to be returned instead of the
+option spec.
+
+Defaults to true.
+
+=item case_insensitive
+
+Option keys are treated case insensitively.
+
+Defuaults to true.
+
+=item repeat_until_valid
+
+When invalid input is entered, reprompt until a valid choice is made.
+
+=back
+
+=cut
