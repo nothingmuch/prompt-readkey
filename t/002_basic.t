@@ -21,7 +21,7 @@ our ( @read_called, @print_called );
 		shift @read_ret;
 	}
 
-	sub _print {
+	sub print {
 		push @print_called, [@_];
 		$print_ret;
 	}

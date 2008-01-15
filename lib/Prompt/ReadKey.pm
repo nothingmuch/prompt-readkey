@@ -189,10 +189,10 @@ sub prompt_once {
 
 sub print_prompt {
 	my ( $self, %args ) = @_;
-	$self->_print($self->_get_arg_or_default( prompt => %args ));
+	$self->print($self->_get_arg_or_default( prompt => %args ));
 }
 
-sub _print {
+sub print {
 	my ( $self, @args ) = @_;
 	local $| = 1;
 	print @args;
@@ -286,7 +286,7 @@ sub display_help {
 		$self->_get_arg_or_default(help_footer => @args),
 	);
 
-	$self->_print("\n$help\n\n");
+	$self->print("\n$help\n\n");
 }
 
 sub tabulate_help_text {
@@ -420,7 +420,7 @@ sub invalid_choice {
 		$output .= " Enter '$keys[0]' for help.";
 	}
 
-	$self->_print($output);
+	$self->print($output);
 }
 
 sub option_to_return_value {
