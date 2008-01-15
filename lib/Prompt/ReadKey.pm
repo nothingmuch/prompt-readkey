@@ -40,6 +40,7 @@ has help_headings => (
 has help_header => (
 	isa => "Str",
 	is  => "rw",
+	default => "The list of available commands is:",
 );
 
 has help_footer => (
@@ -261,6 +262,7 @@ sub create_help_option {
 	if ( my @keys = $self->get_help_keys(@args) ) {
 		return {
 			reprompt_after => 1,
+			doc            => "List available commands",
 			name           => "help",
 			keys           => \@keys,
 			callback       => "display_help",
