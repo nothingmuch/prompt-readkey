@@ -114,6 +114,8 @@ has repeat_until_valid => (
 );
 
 sub _deref ($) {
+	return unless @_;
+
 	my $ret = shift;
 
 	if ( wantarray and (ref($ret)||'') eq 'ARRAY' ) {
@@ -125,7 +127,8 @@ sub _deref ($) {
 
 sub _get_arg ($\%) {
 	my ( $name, $args ) = @_;
-	_deref( __get_arg( $name, $args ) );
+	return unless exists $args->{$name};
+	_deref( $args->{$name} );
 }
 
 sub _get_arg_or_default {
@@ -139,11 +142,6 @@ sub _get_arg_or_default {
 			return _deref($self->$method());
 		}
 	}
-}
-
-sub __get_arg  {
-	my ( $name, $args ) = @_;
-	$args->{$name};
 }
 
 sub prompt {
