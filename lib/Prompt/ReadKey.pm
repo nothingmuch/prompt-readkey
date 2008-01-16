@@ -5,6 +5,8 @@ use Moose;
 
 use Moose::Util::TypeConstraints;
 
+use Prompt::ReadKey::Util;
+
 use Carp qw(croak);
 use Term::ReadKey;
 use List::Util qw(first);
@@ -113,36 +115,7 @@ has repeat_until_valid => (
 	default => 1,
 );
 
-sub _deref ($) {
-	return unless @_;
 
-	my $ret = shift;
-
-	if ( wantarray and (ref($ret)||'') eq 'ARRAY' ) {
-		return @$ret;
-	} else {
-		return $ret;
-	}
-}
-
-sub _get_arg ($\%) {
-	my ( $name, $args ) = @_;
-	return unless exists $args->{$name};
-	_deref( $args->{$name} );
-}
-
-sub _get_arg_or_default {
-	my ( $self, $name, %args ) = @_;
-
-	if ( exists $args{$name} ) {
-		_get_arg($name, %args);
-	} else {
-		my $method = ( ( $name =~ m/^(?: prompt | options )$/x ) ? "default_$name" : $name );
-		if ( $self->can($method) ) {
-			return _deref($self->$method());
-		}
-	}
-}
 
 sub prompt {
 	my ( $self, %args ) = @_;
