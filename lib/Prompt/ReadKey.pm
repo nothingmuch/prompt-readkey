@@ -238,12 +238,18 @@ sub process_option {
 }
 
 sub gather_options {
-	my ( $self, @args ) = @_;
+	my ( $self, %args ) = @_;
 
 	return (
-		$self->_get_arg_or_default(options => @args),
+		# explicit or default options
+		$self->_get_arg_or_default(options => %args),
+
+		# static additional options from the object *and* options passed on the arg list
 		$self->additional_options(),
-		$self->create_help_option(@args),
+		_get_arg(additional_options => %args),
+
+		# the help command
+		$self->create_help_option(%args),
 	);
 }
 
