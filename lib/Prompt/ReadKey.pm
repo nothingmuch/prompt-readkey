@@ -295,7 +295,7 @@ sub option_to_help_text {
 	my $opt = $args{option};
 
 	return {
-		keys => join(", ", @{ $opt->{keys} } ),
+		keys => join(", ", grep { /^[[:graph:]]+$/ } @{ $opt->{keys} } ),
 		name => $opt->{name} || "",
 		doc => $opt->{doc}  || "",
 	};
