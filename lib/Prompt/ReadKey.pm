@@ -385,28 +385,28 @@ sub format_prompt {
 }
 
 sub read_option {
-	my ( $self, %args ) = @_;
+	my ( $self, @args ) = @_;
 
-	my @options = $self->_get_arg_or_default(options => %args);
+	my @options = $self->_get_arg_or_default(options => @args);
 
 	my %by_key = map {
 		my $opt = $_;
-		map { $_ => $opt } map { $self->process_char( %args, char => $_ ) } @{ $_->{keys} };
+		map { $_ => $opt } map { $self->process_char( @args, char => $_ ) } @{ $_->{keys} };
 	} @options;
 
-	my $c = $self->process_char( %args, char => $self->read_key(%args) );
+	my $c = $self->process_char( @args, char => $self->read_key(@args) );
 
 	if ( defined $c ) {
 		if ( exists $by_key{$c} ) {
 			return $by_key{$c};
 		} elsif ( $c =~ /^\s+$/ ) {
-			if ( my $default = $self->get_default_option(%args) ) {
+			if ( my $default = $self->get_default_option(@args) ) {
 				return $default;
 			}
 		}
 	}
 
-	$self->invalid_choice(%args, char => $c);
+	$self->invalid_choice(@args, char => $c);
 
 	return;
 }
