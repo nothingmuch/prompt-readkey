@@ -251,6 +251,7 @@ sub create_help_option {
 			keys           => \@keys,
 			callback       => "display_help",
 			is_help        => 1,
+			special_option => 1,
 		}
 	}
 
@@ -356,7 +357,7 @@ sub format_options {
 
 	my $default_option = $self->get_default_option(%args);
 
-	my @options = grep { not $_->{is_help} } $self->_get_arg_or_default(options => %args);
+	my @options = grep { not $_->{special_option} } $self->_get_arg_or_default(options => %args);
 
 	if ( $self->_get_arg_or_default( case_insensitive => %args ) ) {
 		return join "", map {
