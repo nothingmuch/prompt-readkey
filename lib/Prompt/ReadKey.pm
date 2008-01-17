@@ -446,16 +446,24 @@ sub option_to_return_value {
 
 	my $opt = $args{option};
 
-	return $opt if $self->_get_arg_or_default(return_option => %args);
-
-	if ( my $cb = $opt->{callback} ) {
-		return $self->$cb(%args);
+	if ( $opt->{special_option} ) {
+		if ( my $cb = $opt->{callback} ) {
+			return $self->$cb(%args);
+		} else {
+			return $opt;
+		}
 	} else {
-		return (
-			$self->_get_arg_or_default(return_name => %args)
-				? $opt->{name}
-				: $opt
-		);
+		return $opt if $self->_get_arg_or_default(return_option => %args);
+
+		if ( my $cb = $opt->{callback} ) {
+			return $self->$cb(%args);
+		} else {
+			return (
+				$self->_get_arg_or_default(return_name => %args)
+					? $opt->{name}
+					: $opt
+			);
+		}
 	}
 }
 
