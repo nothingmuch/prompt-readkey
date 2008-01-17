@@ -379,15 +379,13 @@ sub format_prompt {
 
 	my $format = $self->_get_arg_or_default( prompt_format => @args );
 
-	my $f = Text::Sprintf::Named->new({ fmt => $format });
 
-	$f->format({
-		args => {
-			@args,
-			prompt      => $self->prompt_string(@args),
-			option_keys => $self->format_options(@args),
-		}
-	});
+	$self->format_string(
+		@args,
+		format => $format,
+		prompt      => $self->prompt_string(@args),
+		option_keys => $self->format_options(@args),
+	);
 }
 
 sub read_option {
