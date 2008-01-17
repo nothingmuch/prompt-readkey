@@ -97,6 +97,12 @@ has auto_newline => (
 	default => 1,
 );
 
+has return_option => (
+	isa => "Bool",
+	is  => "rw",
+	default => 0,
+);
+
 has return_name => (
 	isa => "Bool",
 	is  => "rw",
@@ -403,6 +409,8 @@ sub option_to_return_value {
 
 	my $opt = $args{option};
 
+	return $opt if $self->_get_arg_or_default(return_option => %args);
+
 	if ( my $cb = $opt->{callback} ) {
 		return $self->$cb(%args);
 	} else {
@@ -702,6 +710,11 @@ Whether or not to echo back the key entered.
 
 Whether or not to add a newline after reading a key (if the key is not newline
 itself).
+
+=item return_option
+
+Overrides C<return_name> and the callback firing mechanism, so that the option
+spec is always returned.
 
 =item return_name
 

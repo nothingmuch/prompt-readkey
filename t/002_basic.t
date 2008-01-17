@@ -137,3 +137,16 @@ $print_ret = 1;
 	like( $help, qr/two/, "mentions 'two'" );
 	like( $help, qr/help/, "mentions 'help'" );
 }
+
+{
+	local @read_ret = ( 't' );
+	local @read_called;
+	local @print_called;
+
+	is( $t->prompt( return_option => 1 ), $options[1], "option two" );
+
+	is( @read_called, 1, "read once" );
+	is( @print_called, 1, "printed once" );
+}
+
+
