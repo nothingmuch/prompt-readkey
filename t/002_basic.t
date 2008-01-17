@@ -55,7 +55,7 @@ $print_ret = 1;
 	local @read_called;
 	local @print_called;
 
-	is( $t->prompt, "two", "option one" );
+	is( $t->prompt, "two", "option two" );
 
 	is( @read_called, 1, "read once" );
 	is( @print_called, 1, "printed once" );
