@@ -438,7 +438,7 @@ sub invalid_choice {
 		$output .= " Enter '$keys[0]' for help.";
 	}
 
-	$self->print($output);
+	$self->print("$output\n");
 }
 
 sub option_to_return_value {
