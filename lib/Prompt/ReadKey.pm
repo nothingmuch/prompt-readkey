@@ -480,7 +480,14 @@ sub read_key {
 		$sigint->();
 	};
 
-    my $c = ReadKey( $self->_get_arg_or_default( readkey_mode => %args ) );
+	my $readkey_mode = $self->_get_arg_or_default( readkey_mode => %args );
+
+	my $c = ReadKey($readkey_mode);
+
+	if ( $c eq chr(0x1b) ) {
+		$c .= ReadKey($readkey_mode);
+		$c .= ReadKey($readkey_mode);
+	}
 
     ReadMode(0);
 
