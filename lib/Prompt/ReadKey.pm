@@ -369,7 +369,9 @@ sub format_options {
 }
 
 sub format_prompt {
-	my ( $self, %args ) = @_;
+	my ( $self, @args ) = @_;
+
+	my $format = $self->_get_arg_or_default( prompt_format => @args );
 
 	my $f = Text::Sprintf::Named->new({ fmt => $format });
 
