@@ -3,8 +3,6 @@
 package Prompt::ReadKey;
 use Moose;
 
-use Moose::Util::TypeConstraints;
-
 use Prompt::ReadKey::Util;
 
 use Carp qw(croak);
@@ -52,10 +50,8 @@ has help_footer => (
 	is  => "rw",
 );
 
-subtype Char => as Str => where { length == 1 };
-
 has help_keys => (
-	isa => "ArrayRef[Char]",
+	isa => "ArrayRef[Str]",
 	is  => "rw",
 	auto_deref => 1,
 	default => sub { [qw(h ?)] },
