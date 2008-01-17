@@ -338,8 +338,15 @@ sub filter_options {
 }
 
 sub prompt_string {
-	my ( $self, %args ) = @_;
-	$self->_get_arg_or_default(prompt => %args) || croak "'prompt' argument is required";
+	my ( $self, @args ) = @_;
+	if ( my $string = $self->_get_arg_or_default(prompt => @args) ) {
+		return $self->format_string(
+			@args,
+			format => $string,
+		);
+	} else {
+		croak "'prompt' argument is required";
+	}
 }
 
 sub get_default_option {
