@@ -197,17 +197,16 @@ sub process_option {
 	my ( $self, %args ) = @_;
 	my $opt = $args{option};
 
-	my @keys = $opt->{key} ? $opt->{key} : @{ $opt->{keys} || [] };
+	my @keys = $opt->{key} ? delete($opt->{key}) : @{ $opt->{keys} || [] };
 
 	unless ( @keys ) {
 		croak "either 'key', 'keys', or 'name' is a required option" unless $opt->{name};
 		@keys = ( substr $opt->{name}, 0, 1 );
 	}
 
-	return {
-		%$opt,
-		keys => \@keys,
-	};
+	$opt->{keys} = \@keys;
+
+	return $opt;
 }
 
 sub gather_options {
