@@ -340,14 +340,26 @@ sub prompt_string {
 	$self->_get_arg_or_default(prompt => %args) || croak "'prompt' argument is required";
 }
 
+sub get_default_option {
+	my ( $self, @args ) = @_;
+
+	if ( my $default = $self->_get_arg_or_default( default_option => @args ) ) {
+		return $default;
+	} else {
+		return first { $_->{default} } $self->_get_arg_or_default( options => @args );
+	}
+}
+
 sub format_options {
 	my ( $self, %args ) = @_;
+
+	my $default_option = $self->get_default_option(%args);
 
 	my @options = grep { not $_->{is_help} } $self->_get_arg_or_default(options => %args);
 
 	if ( $self->_get_arg_or_default( case_insensitive => %args ) ) {
 		return join "", map {
-			my $default = $_->{default};
+			my $default = $default_option == $_;
 			map { $default ? uc : lc } @{ $_->{keys} };
 		} @options;
 	} else {
@@ -377,7 +389,9 @@ sub read_option {
 		if ( exists $by_key{$c} ) {
 			return $by_key{$c};
 		} elsif ( $c =~ /^\s+$/ ) {
-			return first { $_->{default} } @options;
+			if ( my $default = $self->get_default_option(%args) ) {
+				return $default;
+			}
 		}
 	}
 
