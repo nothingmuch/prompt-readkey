@@ -196,8 +196,8 @@ sub prepare_options {
 }
 
 sub process_options {
-	my ( $self, %args ) = @_;
-	map { $self->process_option( %args, option => $_ ) } $self->_get_arg_or_default(options => %args);
+	my ( $self, @args ) = @_;
+	map { $self->process_option( @args, option => $_ ) } $self->_get_arg_or_default(options => @args);
 }
 
 sub process_option {
