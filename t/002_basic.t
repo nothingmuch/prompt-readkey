@@ -27,12 +27,14 @@ our ( @read_called, @print_called );
 	}
 }
 
+my @options = (
+	{ name => "one", default => 1 },
+	{ name => "two" },
+);
+
 my $t = MockPrompter->new(
 	default_prompt => "foo",
-	default_options => [
-		{ name => "one", default => 1 },
-		{ name => "two" },
-	],
+	default_options => \@options,
 );
 
 $print_ret = 1;
