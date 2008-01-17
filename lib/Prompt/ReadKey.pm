@@ -356,10 +356,10 @@ sub format_options {
 	if ( $self->_get_arg_or_default( case_insensitive => %args ) ) {
 		return join "", map {
 			my $default = $default_option == $_;
-			map { $default ? uc : lc } @{ $_->{keys} };
+			map { $default ? uc : lc } grep { /^[[:graph:]]+$/ } @{ $_->{keys} };
 		} @options;
 	} else {
-		return join "", map { @{ $_->{keys} } } @options;
+		return join "", grep { /^[[:graph:]]+$/ } map { @{ $_->{keys} } } @options;
 	}
 }
 
@@ -451,7 +451,7 @@ sub read_key {
 
     die "Error reading key from user: $!" unless defined($c);
 
-    print $c if $self->_get_arg_or_default( echo_key => %args );
+    print $c if $c =~ /^[[:graph:]]+$/ and $self->_get_arg_or_default( echo_key => %args );
 
     print "\n" if $c ne "\n" and $self->_get_arg_or_default( auto_newline => %args );
 
