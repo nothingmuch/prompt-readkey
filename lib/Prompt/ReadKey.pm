@@ -426,8 +426,9 @@ sub invalid_choice {
 	my ( $self, %args ) = @_;
 
 	my $output;
+	my $c = $args{char};
 
-	if ( defined ( my $c = $args{char} ) ) {
+	if ( defined($c) and $c =~ /^[[:graph:]]+$/ ) {
 		$output = "'$c' is not a valid choice, please select one of the options.";
 	} else {
 		$output = "Invalid input, please select one of the options.";
