@@ -9,6 +9,7 @@ use Carp qw(croak);
 use Term::ReadKey;
 use List::Util qw(first);
 use Text::Table;
+use Text::Sprintf::Named;
 
 our $VERSION = "0.01";
 
@@ -117,7 +118,11 @@ has repeat_until_valid => (
 	default => 1,
 );
 
-
+has prompt_format => (
+	isa => "Str",
+	is  => "rw",
+	default => '%(prompt)s [%(option_keys)s] ',
+);
 
 sub prompt {
 	my ( $self, %args ) = @_;
@@ -126,8 +131,8 @@ sub prompt {
 
 	$self->do_prompt(
 		%args,
-		options => \@options,
-		prompt  => $self->format_prompt( %args, options => \@options ),
+		options      => \@options,
+		prompt       => $self->format_prompt( %args, options => \@options, option_count => scalar(@options) ),
 	);
 }
 
@@ -366,7 +371,15 @@ sub format_options {
 sub format_prompt {
 	my ( $self, %args ) = @_;
 
-	sprintf "%s [%s] ", $self->prompt_string(%args), $self->format_options(%args);
+	my $f = Text::Sprintf::Named->new({ fmt => $format });
+
+	$f->format({
+		args => {
+			@args,
+			prompt      => $self->prompt_string(@args),
+			option_keys => $self->format_options(@args),
+		}
+	});
 }
 
 sub read_option {
