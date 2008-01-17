@@ -5,7 +5,5 @@ use warnings;
 
 use Test::More 'no_plan';
 
-use ok 'Prompt::ReadKey';
-
 use ok 'Prompt::ReadKey::Sequence';
 
