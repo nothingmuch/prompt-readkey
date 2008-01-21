@@ -103,7 +103,7 @@ $print_ret = 1;
 		\@print_called,
 		[
 			[ $t, "foo [Ot] " ],
-			[ $t, "'x' is not a valid choice, please select one of the options. Enter 'h' for help." ],
+			[ $t, "'x' is not a valid choice, please select one of the options. Enter 'h' for help.\n" ],
 			[ $t, "foo [Ot] " ],
 		],
 		"print arguments",
