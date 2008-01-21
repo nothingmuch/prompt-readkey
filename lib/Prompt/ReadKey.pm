@@ -11,7 +11,7 @@ use List::Util qw(first);
 use Text::Table;
 use Text::Sprintf::Named;
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 has default_prompt => (
 	isa => "Str",
