@@ -1,3 +1,6 @@
+0.03
+	- Add missing dep on Set::Object
+
 0.02
 	- Add Prompt::ReadKey::Sequence
 
