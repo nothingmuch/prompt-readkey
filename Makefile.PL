@@ -16,7 +16,9 @@ WriteMakefile(
 		'Text::Table' => 0,
 		'Term::ReadKey' => 0,
 		'Scalar::Util' => 0,
+		'List::Util' => 0,
 		'Text::Sprintf::Named' => 0,
+		'Set::Object' => 0,
 	},
 );
 
