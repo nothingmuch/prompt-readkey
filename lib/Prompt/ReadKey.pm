@@ -364,7 +364,7 @@ sub get_default_option {
 sub format_options {
 	my ( $self, %args ) = @_;
 
-	my $default_option = $self->get_default_option(%args);
+	my $default_option = $self->get_default_option(%args) || {};
 
 	my @options = grep { not $_->{special_option} } $self->_get_arg_or_default(options => %args);
 
