@@ -87,7 +87,7 @@ has prev_help => (
 has prev_keys => (
 	isa => "ArrayRef[Str]",
 	is  => "rw",
-	default => sub { ["j", "\x{1b}[A", "\x{1b}[D" ] }, # up arrow, left arrow
+	default => sub { ["k", "\x{1b}[A", "\x{1b}[D" ] }, # up arrow, left arrow
 );
 
 has next_help => (
@@ -99,7 +99,7 @@ has next_help => (
 has next_keys => (
 	isa => "ArrayRef[Str]",
 	is  => "rw",
-	default => sub { ["k", "\x{1b}[B", "\x{1b}[C" ] }, # down arrow, right arrow
+	default => sub { ["j", "\x{1b}[B", "\x{1b}[C" ] }, # down arrow, right arrow
 );
 
 # trés ugly...
