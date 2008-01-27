@@ -33,8 +33,8 @@ my @options = (
 );
 
 my $t = MockPrompter->new(
-	default_prompt => "foo",
-	default_options => \@options,
+	prompt => "foo",
+	options => \@options,
 );
 
 $print_ret = 1;

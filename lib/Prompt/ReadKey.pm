@@ -14,6 +14,7 @@ use Text::Sprintf::Named;
 our $VERSION = "0.03";
 
 has default_prompt => (
+	init_arg => "prompt",
 	isa => "Str",
 	is  => "rw",
 );
@@ -59,6 +60,7 @@ has help_keys => (
 );
 
 has default_options => (
+	init_arg => "options",
 	isa => "ArrayRef[HashRef]",
 	is  => "rw",
 	auto_deref => 1,
@@ -694,15 +696,11 @@ These attributes control default values for options.
 
 =item prompt
 
-=item default_prompt
-
-The attribute name is prefixed with C<default> for clarity.
-
-=item default_options
+The prompt to display.
 
 =item options
 
-The attribute name is prefixed with C<default> for clarity.
+The options to prompt for.
 
 =item additional_options
 

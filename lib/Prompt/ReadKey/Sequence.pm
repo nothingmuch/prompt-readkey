@@ -18,11 +18,13 @@ has items => (
 );
 
 has default_prompt => (
+	init_arg => "prompt",
 	isa => "Str",
 	is  => "rw",
 );
 
 has default_options => (
+	init_arg => "options",
 	isa => "ArrayRef[HashRef]",
 	is  => "rw",
 	default => sub { [ ] },
@@ -340,7 +342,7 @@ movement options.
 	use Prompt::ReadKey::Sequence;
 
 	my $seq = Prompt::ReadKey::Sequence->new(
-		default_options => ..,
+		options => ..,
 		items => \@items,
 	);
 
